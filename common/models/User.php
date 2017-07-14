@@ -1,25 +1,28 @@
 <?php
 namespace common\models;
 
+
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use backend\models\Regions;
 
 /**
  * User model
  *
  * @property integer $id
- * @property string $username
+ * @property integer $cpf
  * @property string $password_hash
  * @property string $password_reset_token
- * @property string $email
+ * @property string $email 
  * @property string $auth_key
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property integer $region
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -53,6 +56,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            [['region'], 'exist', 'skipOnError' => true, 'targetClass' => Regions::className(), 'targetAttribute' => ['region' => 'region_id']],
         ];
     }
 
@@ -73,14 +77,15 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Finds user by username
+     * Finds user by cpf
      *
-     * @param string $username
+     * @param integer $cpf
      * @return static|null
      */
-    public static function findByUsername($username)
+    public static function findByUserCpf($cpf)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        //return static::findOne(['cpf' => $cpf, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['cpf' => $cpf]);
     }
 
     /**
@@ -124,6 +129,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function getId()
     {
         return $this->getPrimaryKey();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCpf()
+    {
+        return $this->cpf;
     }
 
     /**
