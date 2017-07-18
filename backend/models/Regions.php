@@ -12,7 +12,7 @@ use Yii;
  * @property string $region_description
  * @property string $region_create_date
  *
- * @property User $user
+ * @property User[] $users
  */
 class Regions extends \yii\db\ActiveRecord
 {
@@ -53,8 +53,8 @@ class Regions extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getUsers()
     {
-        return $this->hasOne(User::className(), ['cpf' => 'region_id']);
+        return $this->hasMany(User::className(), ['region' => 'region_id']);
     }
 }

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use dosamigos\datepicker\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Documents */
@@ -16,7 +17,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'document_description')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'document_issue_date')->textInput() ?>
+    <?= $form->field($model, 'document_issue_date')->widget(
+        DatePicker::className(), [
+        // inline too, not bad
+        'inline' => false,
+        // modify template for custom rendering
+        //'template' => '<div class="well well-sm" style="background-color: #fff; width:250px">{input}</div>',
+        'clientOptions' => [
+            'autoclose' => true,
+            'format' => 'dd-mm-yyyy'
+        ]
+    ]);?>
 
     <?= $form->field($model, 'document_user')->textInput() ?>
 

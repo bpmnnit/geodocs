@@ -66,7 +66,7 @@ class RegionsController extends Controller
         $model = new Regions();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->region_create_date = date('Y-m-d h:m:s');
+            $model->region_create_date = date('Y-m-d');
             $model->save();
             return $this->redirect(['view', 'id' => $model->region_id]);
         } else {

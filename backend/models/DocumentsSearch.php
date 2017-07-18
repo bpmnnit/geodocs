@@ -5,6 +5,9 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use backend\models\Documents;
+use common\models\User;
+
 /**
  * DocumentsSearch represents the model behind the search form about `backend\models\Documents`.
  */
@@ -60,14 +63,14 @@ class DocumentsSearch extends Documents
         // grid filtering conditions
         $query->andFilterWhere([
             //'document_id' => $this->document_id,
-            //'document_issue_date' => $this->document_issue_date,
+            'document_issue_date' => $this->document_issue_date,
             'document_create_date' => $this->document_create_date,
             //'document_user' => $this->document_user,
         ]);
 
         $query->andFilterWhere(['like', 'document_name', $this->document_name])
-            //>andFilterWhere(['like', 'document_description', $this->document_description])
-            ->andFilterWhere(['like', 'document_type', $this->document_type])
+            //->andFilterWhere(['like', 'document_description', $this->document_description])
+            ->andFilterWhere(['=', 'document_type', $this->document_type])
             ->andFilterWhere(['like', 'document_url', $this->document_url])
             ->andFilterWhere(['like', 'user.name', $this->document_user]);
 

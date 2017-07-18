@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use dosamigos\datepicker\DatePicker;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\DocumentsSearch */
@@ -18,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Create Documents', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <?php Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -27,16 +30,30 @@ $this->params['breadcrumbs'][] = $this->title;
             //'document_id',
             'document_name',
             //'document_description:ntext',
-            'document_issue_date',
+            [
+                'attribute' => 'document_issue_date',
+                'value' => 'document_issue_date',
+                'format' => 'raw',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'document_issue_date',
+                    'clientOptions' => [
+                        'autoclose' => true,
+                        'format' => 'yyyy-m-d',
+                    ]
+                ]),
+            ],
             //'document_create_date',
+            // 'document_user',
+            'document_type',
+            'document_url:url',
             [
                 'attribute' => 'document_user',
                 'value' => 'documentUser.name',
             ],
-            'document_type',
-            'document_url:url',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
+    <?php Pjax::end(); ?>
 </div>

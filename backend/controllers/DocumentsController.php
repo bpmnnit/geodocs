@@ -66,7 +66,10 @@ class DocumentsController extends Controller
         $model = new Documents();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->document_create_date = date('Y-m-d h:m:s');    
+            $model->document_create_date = date('Y-m-d');
+            $ddmmyyyy = $model->document_issue_date;
+            $yyyymmdd = explode("-", $ddmmyyyy);
+            $model->document_issue_date = $yyyymmdd[2] . "-" . $yyyymmdd[1] . "-" . $yyyymmdd[0];
             $model->save();
             return $this->redirect(['view', 'id' => $model->document_id]);
         } else {

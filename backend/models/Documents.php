@@ -51,14 +51,14 @@ class Documents extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'document_id' => 'ID',
-            'document_name' => 'Name',
-            'document_description' => 'Description',
-            'document_issue_date' => 'Issue Date',
-            'document_create_date' => 'Create Date',
-            'document_user' => 'Uploaded By',
-            'document_type' => 'Type',
-            'document_url' => 'Url',
+            'document_id' => 'Document ID',
+            'document_name' => 'Document Name',
+            'document_description' => 'Document Description',
+            'document_issue_date' => 'Document Issue Date',
+            'document_create_date' => 'Document Create Date',
+            'document_user' => 'Document User',
+            'document_type' => 'Document Type',
+            'document_url' => 'Document Url',
         ];
     }
 
