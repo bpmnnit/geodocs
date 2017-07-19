@@ -39,3 +39,8 @@ composer.lock
 
 # gitignore
 .gitignore
+
+# document files to be ignored
+*.pdf
+*.png
+*.jpg

@@ -28,7 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'document_id',
-            'document_name',
+            [
+                'attribute' => 'document_name',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::a($model->document_name, ['documents/download', 'id' => $model->document_id], ['data-pjax' => '0']);
+                }
+            ],
             //'document_description:ntext',
             [
                 'attribute' => 'document_issue_date',
@@ -46,7 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
             //'document_create_date',
             // 'document_user',
             'document_type',
-            'document_url:url',
             [
                 'attribute' => 'document_user',
                 'value' => 'documentUser.name',

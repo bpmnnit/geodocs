@@ -24,6 +24,11 @@ class Documents extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $file;
+
+    /**
+     * @inheritdoc
+     */
     public static function tableName()
     {
         return 'documents';
@@ -35,13 +40,14 @@ class Documents extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['document_name', 'document_issue_date', 'document_create_date', 'document_user', 'document_type', 'document_url'], 'required'],
+            [['document_name', 'document_issue_date', 'document_create_date', 'document_user', 'document_type', 'file'], 'required'],
             [['document_description', 'document_type'], 'string'],
             [['document_issue_date', 'document_create_date'], 'safe'],
             [['document_user'], 'integer'],
             [['document_name'], 'string', 'max' => 255],
             [['document_url'], 'string', 'max' => 1024],
             [['document_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['document_user' => 'cpf']],
+            [['file'], 'file'],
         ];
     }
 
@@ -59,6 +65,7 @@ class Documents extends \yii\db\ActiveRecord
             'document_user' => 'Document User',
             'document_type' => 'Document Type',
             'document_url' => 'Document Url',
+            'file' => 'Upload Document',
         ];
     }
 

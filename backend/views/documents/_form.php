@@ -11,7 +11,7 @@ use dosamigos\datepicker\DatePicker;
 
 <div class="documents-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?= $form->field($model, 'document_name')->textInput(['maxlength' => true]) ?>
 
@@ -33,7 +33,7 @@ use dosamigos\datepicker\DatePicker;
 
     <?= $form->field($model, 'document_type')->dropDownList([ 'DO LETTER' => 'DO LETTER', 'ANNUAL REPORT' => 'ANNUAL REPORT', 'MONTHLY REPORT' => 'MONTHLY REPORT', 'ACQUISITION REPORT' => 'ACQUISITION REPORT', 'PROCESSING REPORT' => 'PROCESSING REPORT', 'ORGANOGRAM' => 'ORGANOGRAM', ], ['prompt' => 'Document Type']) ?>
 
-    <?= $form->field($model, 'document_url')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'file')->fileInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

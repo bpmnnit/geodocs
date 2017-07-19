@@ -8,6 +8,7 @@ use backend\models\DocumentsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * DocumentsController implements the CRUD actions for Documents model.
@@ -45,6 +46,22 @@ class DocumentsController extends Controller
     }
 
     /**
+     * enables downloading an uploaded document
+     */
+    public function actionDownload($id) {
+        $download = Documents::findOne($id);
+        $path = Yii::getAlias('@webroot').$download->document_url;
+
+        //echo $path;
+
+        if (file_exists($path)) {
+            return Yii::$app->response->sendFile($path);
+        } else {
+            throw new NotFoundHttpException('The requested document does not exist.');
+        }
+    }
+
+    /**
      * Displays a single Documents model.
      * @param integer $id
      * @return mixed
@@ -67,9 +84,17 @@ class DocumentsController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->document_create_date = date('Y-m-d');
+
             $ddmmyyyy = $model->document_issue_date;
             $yyyymmdd = explode("-", $ddmmyyyy);
             $model->document_issue_date = $yyyymmdd[2] . "-" . $yyyymmdd[1] . "-" . $yyyymmdd[0];
+
+
+
+            $model->file = UploadedFile::getInstance($model, 'file');
+            $model->document_url = '/uploads/' . $model->file->baseName . '.' . $model->file->extension;
+            $model->file->saveAs($model->document_url);
+
             $model->save();
             return $this->redirect(['view', 'id' => $model->document_id]);
         } else {
