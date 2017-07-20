@@ -6,6 +6,7 @@ use Yii;
 use backend\models\Documents;
 use backend\models\DocumentsSearch;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
@@ -80,28 +81,34 @@ class DocumentsController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Documents();
+        if(yii::$app->user->can('create-documents')) {
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->document_create_date = date('Y-m-d');
+            $model = new Documents();
 
-            $ddmmyyyy = $model->document_issue_date;
-            $yyyymmdd = explode("-", $ddmmyyyy);
-            $model->document_issue_date = $yyyymmdd[2] . "-" . $yyyymmdd[1] . "-" . $yyyymmdd[0];
+            if ($model->load(Yii::$app->request->post())) {
+                $model->document_create_date = date('Y-m-d');
+
+                $ddmmyyyy = $model->document_issue_date;
+                $yyyymmdd = explode("-", $ddmmyyyy);
+                $model->document_issue_date = $yyyymmdd[2] . "-" . $yyyymmdd[1] . "-" . $yyyymmdd[0];
 
 
 
-            $model->file = UploadedFile::getInstance($model, 'file');
-            $model->document_url = '/uploads/' . $model->file->baseName . '.' . $model->file->extension;
-            $model->file->saveAs($model->document_url);
+                $model->file = UploadedFile::getInstance($model, 'file');
+                $model->document_url = '/uploads/' . $model->file->baseName . '.' . $model->file->extension;
+                $model->file->saveAs($model->document_url);
 
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->document_id]);
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->document_id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            throw new ForbiddenHttpException;
         }
+
     }
 
     /**

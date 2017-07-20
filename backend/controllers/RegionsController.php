@@ -6,6 +6,7 @@ use Yii;
 use backend\models\Regions;
 use backend\models\RegionsSearch;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -63,16 +64,20 @@ class RegionsController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Regions();
+        if(Yii::$app->user->can('create-regions')) {
+            $model = new Regions();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->region_create_date = date('Y-m-d');
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->region_id]);
+            if ($model->load(Yii::$app->request->post())) {
+                $model->region_create_date = date('Y-m-d');
+                $model->save();
+                return $this->redirect(['view', 'id' => $model->region_id]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            throw new ForbiddenHttpException;
         }
     }
 
