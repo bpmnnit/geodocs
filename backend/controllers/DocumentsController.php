@@ -51,7 +51,7 @@ class DocumentsController extends Controller
      */
     public function actionDownload($id) {
         $download = Documents::findOne($id);
-        $path = Yii::getAlias('@webroot').$download->document_url;
+        $path = Yii::getAlias('@webroot/').$download->document_url;
 
         //echo $path;
 
@@ -95,13 +95,13 @@ class DocumentsController extends Controller
 
 
                 $model->file = UploadedFile::getInstance($model, 'file');
-                $model->document_url = '/uploads/' . $model->file->baseName . '.' . $model->file->extension;
+                $model->document_url = 'uploads/' . $model->file->baseName . '.' . $model->file->extension;
                 $model->file->saveAs($model->document_url);
 
                 $model->save();
                 return $this->redirect(['view', 'id' => $model->document_id]);
             } else {
-                return $this->render('create', [
+                return $this->renderAjax('create', [
                     'model' => $model,
                 ]);
             }

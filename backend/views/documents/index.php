@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use dosamigos\datepicker\DatePicker;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\DocumentsSearch */
@@ -18,8 +20,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Documents', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::button('Create Documents', ['value' => Url::to('index.php?r=documents/create'), 'class' => 'btn btn-success', 'id' => 'documentModalButton']) ?>
     </p>
+
+    <?php
+        Modal::begin([
+           'header' => '<h1>Documents</h1>',
+            'id' => 'documentModal',
+            'size' => 'modal-md',
+        ]);
+
+        echo "<div id='documentModalContent'></div>";
+
+        Modal::end();
+    ?>
+
     <?php Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
